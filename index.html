@@ -78,20 +78,7 @@
 
     <script type="text/javascript">
         $(function () {
-            var str = "RESretruncode^6936110^701室^16842282^南昌南昌县向塘镇站前路广宥鞋业有限公司宿舍A栋1单元7楼701室()^11798^向塘镇^11^32^1^18^1^791";
-            for(var i = 0; i < 10; i++) {
-                if(str.charAt(str.length - 1) == '^') {
-                    str = str.substring(0, str.length -1);
-                }else {
-                    break;
-                }
-            }
-            console.log('str = ' + str)
-            var reg = /\^/g;
-            if(str.match(reg).length > 12) {
-                alert('输入有误!');
-                return;
-            }
+            
         });
     </script>
 
