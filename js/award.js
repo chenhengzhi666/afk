@@ -11,7 +11,11 @@ var turnplate = {
 	bRotate: false, //false:停止;ture:旋转
 };
 
-var host = 'http://47.110.73.210:8090';
+const appid = 'wx1f9c767629fabde5'; //appid
+const redirect_uri = 'http://suxiaozhi.tunnel.qydev.com/index.html';
+var ticket = '';
+
+var host = '';
 var count = 0;
 var countMax = 1; //单人可玩次数
 var gameState = 1; //0：活动暂未开放	1：活动正常开发
@@ -73,7 +77,7 @@ $(document).ready(function () {
 	var getAccess_token_URL =
 		'https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx1f9c767629fabde5&secret=362855efacd523cedc6bc18805bb74b6&code=' +
 		code + '&grant_type=authorization_code';
-
+	// window.location.href
 	yahooProxy('getAccess_token', getAccess_token_URL);
 
 	// 雅虎ypl代理
@@ -88,6 +92,7 @@ $(document).ready(function () {
 				format: 'json' // 代理返回数据格式
 			},
 			success: function (data) {
+				console.log(data)
 				if (flag == 'getAccess_token') {
 					var data = data.query.results.json; //获取带有access_token的数据
 					var getUserInfoUrl =
@@ -104,10 +109,75 @@ $(document).ready(function () {
 					}, (res) => {
 						console.log(res);
 					});
+				} else if (flag == 'fx') {
+					console.log(data.query.results.json.access_token);
+					var u = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + data.query.results.json.access_token + "&type=jsapi";
+					yahooProxy('fx1', u);
+				} else if (flag == 'fx1') {
+					var ticket = data.query.results.json.ticket;
+					console.log(ticket)
+					var str = nonceStr();
+					//配置微信信息
+					wx.config({
+						debug: false, // true:调试时候弹窗
+						appId: appid, // 微信appid
+						timestamp: new Date().getSeconds(), // 时间戳
+						nonceStr: str, // 随机字符串
+						signature: create_signature(str, ticket, new Date().getSeconds(), window.location.href), // 签名
+						jsApiList: [
+							// 所有要调用的 API 都要加到这个列表中
+							'onMenuShareTimeline', // 分享到朋友圈接口
+							'onMenuShareAppMessage', //  分享到朋友接口
+							'onMenuShareQQ', // 分享到QQ接口
+							'onMenuShareWeibo' // 分享到微博接口
+						]
+					});
+
+
+
+					wx.ready(function () {
+						// 微信分享的数据
+						var shareData = {
+							"imgUrl": 'http://suxiaozhi.tunnel.qydev.com/img/logo.ico', // 分享显示的缩略图地址
+							"link": 'http://suxiaozhi.tunnel.qydev.com/weixin', // 分享地址
+							"desc": '真正的程序员喜欢兼卖爆米花，他们利用CPU散发出的热量做爆米花，可以根据米花爆裂的速度听出正在运行什么程序。', // 分享描述
+							"title": '陈恒志的Demo分享', // 分享标题
+							success: function () {
+								// 分享成功可以做相应的数据处理
+							}
+						}
+						wx.onMenuShareTimeline(shareData);
+						wx.onMenuShareAppMessage(shareData);
+						wx.onMenuShareQQ(shareData);
+						wx.onMenuShareWeibo(shareData);
+					});
 				}
 			}
 		})
 	}
+
+	var url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=362855efacd523cedc6bc18805bb74b6";
+	yahooProxy('fx', url);
+
+	function nonceStr() {
+		var str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		var val = "";
+		for (var i = 0; i < 16; i++) {
+			val += str.substr(Math.round((Math.random() * 10)), 1);
+		}
+		return val;
+	}
+
+	function create_signature(nocestr, ticket, timestamp, url) {
+		var signature = "";
+		// 这里参数的顺序要按照 key 值 ASCII 码升序排序
+		var s = "jsapi_ticket=" + ticket + "&noncestr=" + nocestr + "&timestamp=" + timestamp + "&url=" + url;
+		console.log(s)
+		return sha1(s);
+	}
+
+
+
 
 	function getQueryString(name) {
 		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -236,7 +306,7 @@ $(document).ready(function () {
 			openid: openid
 		}, (res) => {
 			if (res.result.length > 0) {
-				$(".xxcy_text").html('您好：' + res.result[0].nickname + ',您于' + res.result[0].creat_time + '已参加本次活动，您本次活动的奖品为“' + res.result[0].award_name + '”,请尽快领取！');
+				$(".xxcy_text").html('您好：' + res.result[0].nickname + '，您于' + res.result[0].creat_time + '已参加本次活动，您本次活动的奖品为“' + res.result[0].award_name + '”，请尽快领取！');
 				$("#xxcy-main").fadeIn();
 			} else {
 				count++;

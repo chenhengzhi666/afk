@@ -2,14 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 
-const hostName = '192.168.1.103'; // 设置主机名
+const hostName = '127.0.0.1'; // 设置主机名
 const port = 8080; // 设置端口号
 const appid = 'wx1f9c767629fabde5'; //appid
-const redirect_uri = 'http://192.168.1.103:5500/index.html';
+const redirect_uri = 'http://suxiaozhi.tunnel.qydev.com/index.html';
 const connection = mysql.createConnection({
-    host: '114.115.234.194',
+    host: '127.0.0.1',
     user: 'root',
-    password: '??8Hyq78q',
+    password: 'root',
     port: '3306',
     database: 'lottery'
 });
@@ -19,6 +19,9 @@ let app = express();
 app.use(bodyParser.urlencoded({
     extended: false
 }));
+
+app.use(express.static("./../"));
+
 
 app.all('*', (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
