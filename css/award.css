@@ -585,7 +585,6 @@ html,body{
 		width: 100%;
 	}
 }
-@charset "utf-8";
 
 /*基本框架CSS*/
 
@@ -1056,7 +1055,7 @@ html,body{
 }
 
 .xxcy-main .xxcy {
-	width: 70%;
+	width: 75%;
 	height: auto;
 	position: absolute;
 	top: 30%;
@@ -1070,7 +1069,7 @@ html,body{
 .xxcy .xxcy_text{
 	width: 100%;
 	text-align: center;
-	margin: 8vw auto;
+	margin: 7vw auto 4vw;
 }
 .xxcy h3 {
 	font-size: 3.2rem;
@@ -1104,7 +1103,7 @@ html,body{
 	width: 25vw;
 	text-align: center;
 	margin: 0 auto;
-	margin-bottom: 5vw;
+	margin-bottom: 4vw;
 	line-height: 9vw;
 	color: #E1CE85;
 	background: #BA2D1C;

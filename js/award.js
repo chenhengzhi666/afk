@@ -13,7 +13,7 @@ var turnplate = {
 
 var host = 'http://192.168.1.103:8080';
 var count = 0;
-var countMax = 3; //单人可玩次数
+var countMax = 1; //单人可玩次数
 var gameState = 1; //0：活动暂未开放	1：活动正常开发
 var activityStart = '2018-11-23'; //活动开始时间
 var activityEnd = '2018-12-23'; //活动结束时间
@@ -103,7 +103,6 @@ $(document).ready(function () {
 						data: data
 					}, (res) => {
 						console.log(res);
-
 					});
 				}
 			}
@@ -157,7 +156,9 @@ $(document).ready(function () {
 		data.nickname = nickname;
 		delete data.id;
 		delete data.award_bg_color;
-		$.get(host + '/prizeProcess', {data}, (res) => {
+		$.get(host + '/prizeProcess', {
+			data
+		}, (res) => {
 
 		})
 		var angles = item * (360 / turnplate.restaraunts.length) - (360 / (turnplate.restaraunts.length * 2));
@@ -180,7 +181,7 @@ $(document).ready(function () {
 				} else {
 					$("#zj-main").fadeIn();
 					var resultTxt = data.award_name.replace(/[\r\n]/g, ""); //去掉回车换行
-					$("#jiangpin").text(data.award_name);
+					$("#jiangpin").text(resultTxt);
 					save();
 				}
 			}
@@ -218,6 +219,7 @@ $(document).ready(function () {
 	/********抽奖开始**********/
 	$('#tupBtn').click(function () {
 		if (turnplate.bRotate) return;
+
 		if (gameState == 0) {
 			$(".xxcy_text").html("活动时间：" + activityStart + " ~ " + activityEnd);
 			$("#xxcy-main").fadeIn();
@@ -229,11 +231,23 @@ $(document).ready(function () {
 			$("#xxcy-main").fadeIn();
 			return;
 		}
-		count++;
-		turnplate.bRotate = !turnplate.bRotate;
-		var item = rnd(0, turnplate.restaraunts.length - 1);
-		item == 0 ? turnplate.restaraunts.length : item;
-		rotateFn(item + 1, turnplate.restaraunts[item]);
+
+		$.get(host + '/getUserAward', {
+			openid: openid
+		}, (res) => {
+			if (res.result.length > 0) {
+				$(".xxcy_text").html('您好：' + res.result[0].nickname + ',您于' + res.result[0].creat_time + '已参加本次活动，您本次活动的奖品为“' + res.result[0].award_name + '”,请尽快领取！');
+				$("#xxcy-main").fadeIn();
+			} else {
+				count++;
+				turnplate.bRotate = !turnplate.bRotate;
+				var item = rnd(0, turnplate.restaraunts.length - 1);
+				item == 0 ? turnplate.restaraunts.length : item;
+				rotateFn(item + 1, turnplate.restaraunts[item]);
+			}
+
+		});
+
 	})
 
 });
@@ -249,7 +263,6 @@ window.onload = function () {
 		mui.hideLoading(); //隐藏后的回调函数
 		console.log(res)
 		turnplate.restaraunts = res.result;
-		console.log(turnplate.restaraunts)
 		drawRouletteWheel();
 
 	});
