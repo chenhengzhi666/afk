@@ -11,7 +11,7 @@ var turnplate = {
 	bRotate: false, //false:停止;ture:旋转
 };
 
-var host = 'http://192.168.1.103:8080';
+var host = 'http://47.110.73.210:8090';
 var count = 0;
 var countMax = 1; //单人可玩次数
 var gameState = 1; //0：活动暂未开放	1：活动正常开发
