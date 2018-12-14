@@ -847,7 +847,7 @@ html,body{
 	top: 150vw;
 	left: 5vw;
 	line-height: 9vw;
-	font-size: 3vw;
+	font-size: 3.2vw;
 	color: #EECFCF;
 	text-align: center;
 	background: rgba(0,0,0,0.3);
@@ -856,9 +856,6 @@ html,body{
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	z-index: 2;
-}
-.record_line div{
-	overflow: hidden;
 }
 #gift_coupon{
 	color: #F3D008;
@@ -1059,7 +1056,7 @@ html,body{
 	height: auto;
 	position: absolute;
 	top: 30%;
-	left:15%;
+	left:12.5%;
 	background: white;
 	color: #7A312D;
 	border-radius: 5px;
@@ -1070,6 +1067,7 @@ html,body{
 	width: 100%;
 	text-align: center;
 	margin: 7vw auto 4vw;
+	padding: 0 2vw;
 }
 .xxcy h3 {
 	font-size: 3.2rem;

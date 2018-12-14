@@ -7,9 +7,13 @@
     "async": "^2.6.1",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "mysql": "^2.16.0"
+    "mysql": "^2.16.0",
+    "request": "^2.88.0",
+    "xml2js": "^0.4.19"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jssha": "^2.3.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
