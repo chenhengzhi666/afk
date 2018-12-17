@@ -39,12 +39,29 @@ $(function () {
                 });
             }
 
+            // 获取初始化分享功能数据
+            let ticket = localStorage.getItem('ticket');
+            let appid = localStorage.getItem('appid');
+            let now_time = Date.parse(new Date()) / 1000;   //当前时间
+            let ticket_time = Number(localStorage.getItem('create_time')) + Number(localStorage.getItem('expires_in')); // 签名过期时间
+            let str = nonceStr();
             // 获取奖品信息以及设置
             $.get('./getAwardsAndSetting', {}, (res) => {
                 turnplate.restaraunts = res.result;
                 SHARELINK = res.shareLink;
                 setting = res.setting[0];
                 $('.rule_text').html(setting.game_rule);
+                if (ticket && appid && localStorage.getItem('create_time') && localStorage.getItem('expires_in') && now_time < ticket_time) {
+                    wxShare(appid, str, ticket);
+                } else {
+                    $.get('./getTrcket', {}, (res) => {
+                        localStorage.ticket = res.ticket;
+                        localStorage.appid = res.appid;
+                        localStorage.create_time = Date.parse(new Date()) / 1000;    // 设置时间
+                        localStorage.expires_in = res.expires_in;    // 过期时间
+                        wxShare(res.appid, str, res.ticket);
+                    });
+                }
                 drawRouletteWheel();
             });
 
@@ -62,29 +79,12 @@ $(function () {
                     loop: true, // 循环模式选项
                 });        
             });
-
-            // 获取初始化分享功能数据
-            let ticket = localStorage.getItem('ticket');
-            let appid = localStorage.getItem('appid');
-            let now_time = Date.parse(new Date()) / 1000;   //当前时间
-            let ticket_time = Number(localStorage.getItem('create_time')) + Number(localStorage.getItem('expires_in')); // 签名过期时间
-            let str = nonceStr();
-            if (ticket && appid && localStorage.getItem('create_time') && localStorage.getItem('expires_in') && now_time < ticket_time) {
-                wxShare(appid, str, ticket);
-            } else {
-                $.get('./getTrcket', {}, (res) => {
-                    localStorage.ticket = res.ticket;
-                    localStorage.appid = res.appid;
-                    localStorage.create_time = Date.parse(new Date()) / 1000;    // 设置时间
-                    localStorage.expires_in = res.expires_in;    // 过期时间
-                    wxShare(res.appid, str, res.ticket);
-                });
-            }
         }
     }
 
     let wxShare = (appid, str, ticket) => {
         //配置微信信息
+        console.log(setting)
         wx.config({
             debug: false, // true:调试时候弹窗
             appId: appid, // 微信appid
@@ -103,14 +103,15 @@ $(function () {
         wx.ready(function () {
             // 微信分享的数据
             let shareData = {
-                "imgUrl": 'https://www.suxiaozhi.cn/chz/img/mn.gif', // 分享显示的缩略图地址
-                "link": 'https://www.suxiaozhi.cn/chz/afk', // 分享地址
-                "desc": '为API生，为框架死，为debug奋斗一辈子，吃符号的亏，上大小写的当，最后死在需求上。', // 分享描述
-                "title": '码农日常', // 分享标题
+                "imgUrl": setting.share_icon, // 分享显示的缩略图地址
+                "link": SHARELINK, // 分享地址
+                "desc": setting.share_desc, // 分享描述
+                "title": setting.share_title, // 分享标题
                 success: function () {
                     // 分享成功可以做相应的数据处理
                 }
             }
+            console.log(shareData)
             wx.onMenuShareTimeline(shareData);
             wx.onMenuShareAppMessage(shareData);
             wx.onMenuShareQQ(shareData);
