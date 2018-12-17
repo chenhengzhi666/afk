@@ -84,7 +84,6 @@ $(function () {
 
     let wxShare = (appid, str, ticket) => {
         //配置微信信息
-        console.log(setting)
         wx.config({
             debug: false, // true:调试时候弹窗
             appId: appid, // 微信appid
@@ -103,15 +102,14 @@ $(function () {
         wx.ready(function () {
             // 微信分享的数据
             let shareData = {
-                "imgUrl": setting.share_icon, // 分享显示的缩略图地址
-                "link": SHARELINK, // 分享地址
-                "desc": setting.share_desc, // 分享描述
-                "title": setting.share_title, // 分享标题
+                "imgUrl": 'https://www.suxiaozhi.cn/chz/img/mn.gif', // 分享显示的缩略图地址
+                "link": 'https://www.suxiaozhi.cn/chz/afk', // 分享地址
+                "desc": '为API生，为框架死，为debug奋斗一辈子，吃符号的亏，上大小写的当，最后死在需求上。', // 分享描述
+                "title": '码农的日常', // 分享标题
                 success: function () {
                     // 分享成功可以做相应的数据处理
                 }
             }
-            console.log(shareData)
             wx.onMenuShareTimeline(shareData);
             wx.onMenuShareAppMessage(shareData);
             wx.onMenuShareQQ(shareData);
