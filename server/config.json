@@ -1,6 +1,6 @@
 {
     "SERVER": {
-        "hostName": "0.0.0.0",
+        "hostName": "127.0.0.1",
         "port": 3000
     },
     "WX": {
@@ -14,5 +14,8 @@
         "password": "3edc$RFV",
         "port": 3306,
         "database": "lottery"
+    },
+    "SHAREDATA": {
+        "link": "https://www.suxiaozhi.cn/chz/afk"
     }
 }

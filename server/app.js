@@ -7,7 +7,8 @@ const CONFIG = require('./config');
 
 const SERVER = CONFIG.SERVER; // 设置服务器
 const WX = CONFIG.WX;   // 微信配置
-const MYSQL = CONFIG.MYSQL;
+const MYSQL = CONFIG.MYSQL; //数据库配置
+const SHAREDATA = CONFIG.SHAREDATA; //分享字段配置
 
 // 数据库初始化、连接
 const connection = mysql.createConnection(MYSQL);
@@ -35,13 +36,15 @@ app.get('/afk', (req, res) => {
     res.redirect(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${WX.appid}&redirect_uri=${unescape(WX.redirect_uri)}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`);
 });
 
-// 跳转到主页面
-app.get('/afk1', (req, res) => {
-    let code = getQueryString(req._parsedUrl.search, 'code'); // 获取code
-    console.log(`code = ${code}`)
-
-    // console.log(code)
-    // res.redirect(`/index.html${req._parsedUrl.search}`);
+// 获取基本页面配置信息
+app.get('/getSetting', (req, res) => {
+    let getPrizeSql = `select * from setting where id = '1'`;
+    connection.query(getPrizeSql, (err, result) => {
+        if (err) throw err;
+        res.send({
+            result: result
+        })
+    });
 });
 
 app.get('/getUserInfo', (req, res) => {
@@ -90,15 +93,21 @@ app.get('/getUserInfo', (req, res) => {
 });
 
 // 获取奖品数据信息
-app.get('/getAwards', (req, res) => {
+app.get('/getAwardsAndSetting', (req, res) => {
     let searchAwardsSql = 'select * from award_info';
+    let getPrizeSql = `select * from setting where id = '1'`;
     let flag;
     connection.query(searchAwardsSql, (err, result) => {
         if (err) throw err;
-        flag = result.length > 0 ? 1 : 0;
-        res.send({
-            flag: flag,
-            result: result
+        connection.query(getPrizeSql, (err1, result1) => {
+            if (err1) throw err1;
+            flag = result1.length > 0 ? 1 : 0;
+            res.send({
+                flag: flag,
+                result: result,
+                setting: result1,
+                shareLink: SHAREDATA
+            });
         });
     });
 });
@@ -155,7 +164,7 @@ app.get('/prizeProcess', (req, res) => {
 
 // 获取已中奖用户信息
 app.get('/getPrize', (req, res) => {
-    let getPrizeSql = `select nickname, award_name from prize_info where award_id != '00000' limit 10`;
+    let getPrizeSql = `select nickname, award_name from prize_info where award_id != '00000' order by creat_time desc limit 5`;
     connection.query(getPrizeSql, (err, result) => {
         if (err) throw err;
         res.send({
@@ -196,7 +205,7 @@ app.post("/loginVerify", (req, res) => {
 
 // 查询所有奖品信息
 app.get('/getAllPrize', (req, res) => {
-    connection.query(`select * from prize_info, user_info where prize_info.openid = user_info.openid order by creat_time limit ${(req.query.page - 1) * req.query.limit}, ${req.query.limit}`, (err, result) => {
+    connection.query(`select * from prize_info, user_info where prize_info.openid = user_info.openid order by creat_time desc limit ${(req.query.page - 1) * req.query.limit}, ${req.query.limit}`, (err, result) => {
         if (err) throw err;
         connection.query(`select * from prize_info`, (err1, result1) => {
             if (err1) throw err1;
