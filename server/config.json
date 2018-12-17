@@ -1,6 +1,6 @@
 {
     "SERVER": {
-        "hostName": "127.0.0.1",
+        "hostName": "0.0.0.0",
         "port": 3000
     },
     "WX": {
