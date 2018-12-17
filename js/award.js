@@ -62,22 +62,20 @@ $(function () {
                         wxShare(res.appid, str, res.ticket);
                     });
                 }
-                drawRouletteWheel();
-            });
-
-            // 获取已中奖信息
-            $.get('./getPrize', {}, (res) => {
-                $.each(res.result, (index, item) => {
-                    $('.swiper-wrapper').append(`<div class="swiper-slide">恭喜 <span style="color: #FBDB00;">${decodeURI(item.nickname)}</span> 抽到 <span style="color: #FBDB00;">${item.award_name}</span></div>`);
+                // 获取已中奖信息
+                $.get('./getPrize', {}, (res) => {
+                    $.each(res.result, (index, item) => {
+                        $('.swiper-wrapper').append(`<div class="swiper-slide">恭喜 <span style="color: #FBDB00;">${decodeURI(item.nickname)}</span> 抽到 <span style="color: #FBDB00;">${item.award_name}</span></div>`);
+                    });
+                    new Swiper ('.swiper-container', {
+                        autoplay: true,//可选选项，自动滑动
+                        speed: 700,
+                        height: 50,//你的slide高度
+                        direction : 'vertical',
+                        loop: true, // 循环模式选项
+                    });        
                 });
-                new Swiper ('.swiper-container', {
-                    autoplay: true,//可选选项，自动滑动
-                    speed: 700,
-                    noSwiping : true,
-                    height: 50,//你的slide高度
-                    direction : 'vertical',
-                    loop: true, // 循环模式选项
-                });        
+                drawRouletteWheel();
             });
         }
     }
@@ -103,7 +101,7 @@ $(function () {
             // 微信分享的数据
             let shareData = {
                 "imgUrl": setting.share_icon, // 分享显示的缩略图地址
-                "link": 'https://www.suxiaozhi.cn/chz/afk', // 分享地址
+                "link": SHARELINK.link, // 分享地址
                 "desc": setting.share_desc, // 分享描述
                 "title": setting.share_title, // 分享标题
                 success: function () {
