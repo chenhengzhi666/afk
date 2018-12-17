@@ -1,0 +1,18 @@
+{
+    "SERVER": {
+        "hostName": "0.0.0.0",
+        "port": 3000
+    },
+    "WX": {
+        "appid": "wx1f9c767629fabde5",
+        "secret": "362855efacd523cedc6bc18805bb74b6",
+        "redirect_uri": "https://www.suxiaozhi.cn/chz/index.html"
+    },
+    "MYSQL": {
+        "host": "120.78.209.52",
+        "user": "root",
+        "password": "3edc$RFV",
+        "port": 3306,
+        "database": "lottery"
+    }
+}
