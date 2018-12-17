@@ -70,6 +70,7 @@ $(function () {
                     new Swiper ('.swiper-container', {
                         autoplay: true,//可选选项，自动滑动
                         speed: 700,
+                        autoplayDisableOnInteraction : false,
                         height: 50,//你的slide高度
                         direction : 'vertical',
                         loop: true, // 循环模式选项
