@@ -94,6 +94,48 @@ $(() => {
         });
     };
 
+    let renderSetting = (form, layer) => {
+        getSetting = () => {
+             $.get('./../getSetting', {}, (res) => {
+                let setting = res.result[0];
+                form.val('content2', setting);
+            });
+        }
+        this.getSetting();
+
+        //监听提交
+        form.on('submit(content2)', (data) => {
+            data.field.game_state = data.field.game_state ? 1 : 0;
+            layer.open({
+                title: '提示',
+                btn: ['确定', '取消'], //可以无限个按钮
+                content: '提交后将立即生效，确认提交？',
+                closeBtn: 0,
+                yes: () => {
+                    $.get('./../updataSetting', {
+                        data: data.field
+                    }, (res) => {
+                        if(res.flag && res.flag == 1) {
+                            // updataLayer.close();
+                            layer.msg('系统设置修改成功！', {
+                                icon: 1,
+                                offset: '30%'
+                            });
+                            this.getSetting();
+                        }else {
+                            layer.msg('网络异常，请联系管理员！', {
+                                icon: 5,
+                                offset: '30%'
+                            });
+                            this.getSetting();
+                        }
+                    });
+                }
+            }); 
+            return false; 
+        });
+    };
+
     if ($.cookie('code') && getQueryString('username') && $.cookie('code') == hex_md5(getQueryString(
             'username'))) {
         $('#user_name').text(getQueryString('username'));
@@ -104,6 +146,7 @@ $(() => {
 
             if($.cookie('flag')) {
                 renderTable(table, layer, form);
+                renderSetting(form, layer)
             }else {
                 //示范一个公告层
                 let openLayer = layer.open({
@@ -148,8 +191,7 @@ $(() => {
                         });
                         $(window).attr('location', `./index.html`);
                     }
-                  });     
-                    
+                  });      
             });
         });
     } else {

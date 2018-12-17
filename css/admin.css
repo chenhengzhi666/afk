@@ -10,4 +10,8 @@
 .layui-logo > img {
     width: 50px;
     margin-right: 10px;
+} 
+
+#content1 {
+    /* display: none; */
 }

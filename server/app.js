@@ -47,6 +47,7 @@ app.get('/getSetting', (req, res) => {
     });
 });
 
+//获取用户信息
 app.get('/getUserInfo', (req, res) => {
     let code = req.query.code;
 
@@ -57,7 +58,6 @@ app.get('/getUserInfo', (req, res) => {
             let openid = JSON.parse(body).openid;
             console.log(`access_token = ${access_token}`)
             console.log(`openid = ${openid}`)
-
             // access_token 和 openid 换取用户信息
             request(`https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`, function (error1, response1, body1) {
                 if (!error1 && response1.statusCode == 200) {
@@ -221,6 +221,18 @@ app.get('/getAllPrize', (req, res) => {
 // 更新是否领取字段状态值
 app.get('/updataIsGet', (req, res) => {
     connection.query(`update prize_info set is_get = '${req.query.state}' where openid = '${req.query.openid}' and creat_time = '${req.query.creat_time}'`, (err, result) => {
+        if (err) throw err;
+        res.send({
+            flag: 1,
+            desc: 'success'
+        });
+    });
+});
+
+// 更新是否领取字段状态值
+app.get('/updataSetting', (req, res) => {
+    let d = req.query.data;
+    connection.query(`update setting set game_info = '${d.game_info}', game_max_order = '${d.game_max_order}', game_rule = '${d.game_rule}', game_state = ${d.game_state}, share_desc = '${d.share_desc}', share_icon = '${d.share_icon}', share_title = '${d.share_title}' where id = '1'`, (err, result) => {
         if (err) throw err;
         res.send({
             flag: 1,
