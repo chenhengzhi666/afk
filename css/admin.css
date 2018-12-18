@@ -7,11 +7,28 @@
     -o-border-radius: 50%;
 }
 
+.footer {
+    text-align: center;
+}
+
 .layui-logo > img {
     width: 50px;
     margin-right: 10px;
 } 
 
-#content1 {
-    /* display: none; */
+#content2,
+#content3  {
+    display: none;
+}
+
+#game_info_div {
+    display: none;
+}
+
+#edit {
+    margin-top: 15px;
+}
+
+#edit .layui-input-inline {
+    width: 260px;
 }

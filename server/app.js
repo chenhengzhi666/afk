@@ -218,6 +218,17 @@ app.get('/getAllPrize', (req, res) => {
     });
 }); 
 
+//查询奖品营销案
+app.get('/getAllAward', (req, res) => {
+    connection.query(`select * from award_info`, (err, result) => {
+        if (err) throw err;
+        res.send({
+            code: 0,
+            data: result
+        });
+    });
+}); 
+
 // 更新是否领取字段状态值
 app.get('/updataIsGet', (req, res) => {
     connection.query(`update prize_info set is_get = '${req.query.state}' where openid = '${req.query.openid}' and creat_time = '${req.query.creat_time}'`, (err, result) => {
