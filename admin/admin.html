@@ -45,7 +45,7 @@
             <!-- 内容主体区域 -->
             <div style="padding: 15px;">
                 <div id="content1" class="content">
-                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                    <fieldset class="layui-elem-field layui-field-title" id="fieldset1" style="margin-top: 20px; display: none">
                         <legend>中奖者名单</legend>
                     </fieldset>
                     <form class="layui-form layui-form-pane" action="">
@@ -61,7 +61,7 @@
                     </form>
                 </div>
                 <div id="content3" class="content">
-                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
                         <legend>系统设置</legend>
                     </fieldset>
                     <form class="layui-form" action="" lay-filter="content2">
@@ -130,6 +130,13 @@
     <script type="text/html" id="toolbar">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <span class="layui-btn layui-btn-sm" lay-event="add">
+                <i class="layui-icon">&#xe608;</i> 添加
+            </span>
+        </div>
       </script>
     <script src="../js/jquery.min.js"></script>
     <script src="../layui/layui.js"></script>

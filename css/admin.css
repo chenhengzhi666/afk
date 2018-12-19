@@ -25,10 +25,29 @@
     display: none;
 }
 
-#edit {
+#slideTest1 {
+    margin-top: 16px;
+    width: 85%;
+    float: left;
+}
+
+#edit, #add {
     margin-top: 15px;
 }
 
-#edit .layui-input-inline {
+#edit .layui-input-inline, #add .layui-input-inline {
     width: 260px;
+}
+
+.probability_num {
+    float: right;
+    height: 100%;
+    width: 32px;
+    text-align: center;
+    line-height: 36px;
+}
+
+.bgColor {
+    width: 80px;
+    display: inline-block;
 }

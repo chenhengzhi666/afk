@@ -26,7 +26,7 @@ window.onload = () => {
                 }, (res) => {
                     if (res.flag == 1) {
                         $.cookie('code', hex_md5(userName), {
-                            expires: 1 / 24
+                            expires: 5 / 24
                         }); // expires设置过期时间（天）
                         $.cookie('flag', '', {
                             expires: -1

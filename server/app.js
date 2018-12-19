@@ -229,6 +229,42 @@ app.get('/getAllAward', (req, res) => {
     });
 }); 
 
+//新增奖品营销案规则
+app.get('/addAwardRule', (req, res) => {
+    let prizeProcessSql = 'insert into award_info set ?';
+    connection.query(prizeProcessSql, req.query, (err, result) => {
+        if (err) throw err;
+        console.log(result)
+        res.send({
+            flag: 1,
+        });
+    });
+});
+
+//修改奖品营销案规则
+app.get('/editAwardRule', (req, res) => {
+    let d = req.query;
+    connection.query(`update award_info set award_name = '${d.award_name}', award_id = '${d.award_id}', award_bg_color = '${d.award_bg_color}', award_probability = ${d.award_probability} where id = '${d.id}'`, (err, result) => {
+        if (err) throw err;
+        res.send({
+            flag: 1,
+            desc: 'success'
+        });
+    });
+});
+
+//删除奖品营销案规则
+app.get('/delAwardRule', (req, res) => {
+    let d = req.query;
+    connection.query(`delete from award_info where id = '${d.id}'`, (err, result) => {
+        if (err) throw err;
+        res.send({
+            flag: 1,
+            desc: 'success'
+        });
+    });
+});
+
 // 更新是否领取字段状态值
 app.get('/updataIsGet', (req, res) => {
     connection.query(`update prize_info set is_get = '${req.query.state}' where openid = '${req.query.openid}' and creat_time = '${req.query.creat_time}'`, (err, result) => {
