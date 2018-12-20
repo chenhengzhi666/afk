@@ -119,6 +119,13 @@ $(function () {
                 "title": setting.share_title, // 分享标题
                 success: function () {
                     // 分享成功可以做相应的数据处理
+                    if(!$.cookie('share_time')) {
+                        setting.game_max_order++;
+                        mui.toast('分享成功，可再次抽奖1次！',{ duration:'short', type:'div' }) 
+                        $.cookie('share_time', hex_md5(userName), {
+                            expires: 7
+                        }); // expires设置过期时间（天）
+                    }
                 }
             }
             wx.onMenuShareTimeline(shareData);
