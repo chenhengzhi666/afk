@@ -13,6 +13,7 @@ $(function () {
     let count = 0;
     let SHARELINK = ''; //分享字段
     let setting = {};
+    let weightArr = []; //奖品权重数组
 
     let getQueryString = name => {
         let reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
@@ -47,6 +48,16 @@ $(function () {
             let str = nonceStr();
             // 获取奖品信息以及设置
             $.get('./getAwardsAndSetting', {}, (res) => {
+                let weightSum = 0;
+                $.each(res.result, (i, obj) => {
+                    weightSum += obj.award_probability;
+                    weightArr.push(obj.award_probability); 
+                });
+                console.log(weightSum)
+                $.each(weightArr, (i, obj) => {
+                    weightArr[i] = obj / weightSum;
+                });
+                console.log(weightArr)
                 turnplate.restaraunts = res.result;
                 SHARELINK = res.shareLink;
                 setting = res.setting[0];
@@ -127,6 +138,27 @@ $(function () {
     }
 
     let create_signature = (nocestr, ticket, timestamp, url) => sha1(`jsapi_ticket=${ticket}&noncestr=${nocestr}&timestamp=${timestamp}&url=${url}`);
+
+    let randomInProbability = (weights) => {
+        if( arguments.length > 1 ){
+          weights = [].slice.call( arguments );
+        }
+       
+        let total, current = 0, parts = [],
+            i = 0, l = weights.length;
+       
+        // reduce 方法的简单兼容
+        total = weights.reduce ? weights.reduce((a, b) => {
+          return a + b;
+        } ) : eval( weights.join( '+' ) );
+       
+        for( ; i < l; i ++ ){
+          current += weights[ i ];
+          parts.push( 'if( p < ', current / total, ' ) return ', i / l, ' + n;' );
+        }
+       
+        return Function( 'var p = Math.random(), n = Math.random() / ' + l + ';' + parts.join( '' ) );
+    }
 
     let drawRouletteWheel = () => {
         let canvas = document.getElementById("wheelcanvas");
@@ -265,14 +297,20 @@ $(function () {
             openid: openid
         }, (res) => {
             mui.hideLoading();
-            if (res.result.length > 0) {
-                $(".xxcy_text").html('您好：' + decodeURI(res.result[0].nickname) + '，您于' + res.result[0].creat_time + '已参加本次活动，您本次活动的奖品为“' + res.result[0].award_name + '”，请尽快领取！');
+            if (res.result.length >= setting.game_max_order) {
+                let arrAward = [];
+                $.each(res.result, (i, obj) => {
+                    arrAward.push(obj.award_name);
+                });
+                $(".xxcy_text").html(`您好：${decodeURI(res.result[0].nickname)}，您的抽奖次数已用完，恭喜您获得“${arrAward.join('，')}”奖品，请尽快领取！`);
                 $("#xxcy-main").fadeIn();
             } else {
                 count++;
                 turnplate.bRotate = !turnplate.bRotate;
-                let item = rnd(0, turnplate.restaraunts.length - 1);
+                // let item = rnd(0, turnplate.restaraunts.length - 1);
+                let item = Math.floor(turnplate.restaraunts.length * randomInProbability(weightArr)())
                 item == 0 ? turnplate.restaraunts.length : item;
+                console.log(item);
                 rotateFn(item + 1, turnplate.restaraunts[item]);
             }
 
