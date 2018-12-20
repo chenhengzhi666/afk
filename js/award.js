@@ -118,11 +118,11 @@ $(function () {
                 "desc": setting.share_desc, // 分享描述
                 "title": setting.share_title, // 分享标题
                 success: function () {
-                        mui.toast('分享成功，可再次抽奖1次！',{ duration:'short', type:'div' }) 
                     // 分享成功可以做相应的数据处理
                     if(!$.cookie('share_time')) {
+                        mui.alert('分享成功，可再次抽奖1次！', '提示', '确定'); 
                         setting.game_max_order++;
-                        $.cookie('share_time', hex_md5(userName), {
+                        $.cookie('share_time', '1', {
                             expires: 7
                         }); // expires设置过期时间（天）
                     }
