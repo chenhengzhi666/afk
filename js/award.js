@@ -119,13 +119,7 @@ $(function () {
                 "title": setting.share_title, // 分享标题
                 success: function () {
                     // 分享成功可以做相应的数据处理
-                    if(!$.cookie('share')) {
-                        mui.alert('分享成功，可再次抽奖1次！', '提示', '确定'); 
-                        setting.game_max_order++;
-                        $.cookie('share', '1', {
-                            expires: 7
-                        }); // expires设置过期时间（天）
-                    }
+                    
                 }
             }
             wx.onMenuShareTimeline(shareData);
@@ -294,11 +288,11 @@ $(function () {
             return;
         }
 
-        if (setting.game_max_order <= count) {
-            $(".xxcy_text").html("抽奖次数已用完<br>分享可以增加一次抽奖机会！");
-            $("#xxcy-main").fadeIn();
-            return;
-        }
+        // if (setting.game_max_order <= count) {
+        //     $(".xxcy_text").html("抽奖次数已用完<br>分享邀请好友一起来抽大奖！");
+        //     $("#xxcy-main").fadeIn();
+        //     return;
+        // }
         mui.showLoading("正在加载..", "div"); 
         $.get('./getUserAward', {
             openid: openid
