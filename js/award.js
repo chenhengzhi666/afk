@@ -119,10 +119,10 @@ $(function () {
                 "title": setting.share_title, // 分享标题
                 success: function () {
                     // 分享成功可以做相应的数据处理
-                    if(!$.cookie('share_time')) {
+                    if(!$.cookie('share')) {
                         mui.alert('分享成功，可再次抽奖1次！', '提示', '确定'); 
                         setting.game_max_order++;
-                        $.cookie('share_time', '1', {
+                        $.cookie('share', '1', {
                             expires: 7
                         }); // expires设置过期时间（天）
                     }
