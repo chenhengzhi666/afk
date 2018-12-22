@@ -108,7 +108,7 @@ $(() => {
 
     let renderAwardInfo = (table, layer, form, colorpicker, slider) => {
         //渲染操作窗口
-        windowDom = (title, id, award_bg_color, code = '', award_name = '', award_id = '', award_probability = 0) => {
+        let windowDom = (title, id, award_bg_color, code = '', award_name = '', award_id = '', award_probability = 0) => {
             let win = layer.open({
                 type: 1,
                 title: title,
@@ -285,7 +285,7 @@ $(() => {
         //头工具栏新增事件
         table.on('toolbar(award_info)', (obj) => {
             if(obj.event == 'add') {
-                this.windowDom('新增', 'add', '#fbdb00');
+                windowDom('新增', 'add', '#fbdb00');
             }
         });
         //监听行工具事件
@@ -314,24 +314,21 @@ $(() => {
                     layer.close(index);
                 });
             } else if (obj.event === 'edit') {
-                this.windowDom('编辑', 'edit', data.award_bg_color, data.id, data.award_name, data.award_id, data.award_probability);
+                windowDom('编辑', 'edit', data.award_bg_color, data.id, data.award_name, data.award_id, data.award_probability);
             }
         });
     };
 
     let renderSetting = (form, layer) => {
-        getSetting = () => {
-            let loading = layer.load(2, {
-                shade: [0.45, '#000'] //0.1透明度的白色背景
-            });
-            $.get('./../getSetting', {}, (res) => {
-                let setting = res.result[0];
-                form.val('content2', setting);
-                setting.game_state == 1 ? $('#game_info_div').slideUp() : $('#game_info_div').slideDown();
-                layer.close(loading);
-            });
-        }
-        this.getSetting();
+        let loading = layer.load(2, {
+            shade: [0.45, '#000'] //0.1透明度的白色背景
+        });
+        $.get('./../getSetting', {}, (res) => {
+            let setting = res.result[0];
+            form.val('content2', setting);
+            setting.game_state == 1 ? $('#game_info_div').slideUp() : $('#game_info_div').slideDown();
+            layer.close(loading);
+        });
 
         //监听指定开关
         form.on('switch(game_state)', function (data) {
@@ -360,13 +357,11 @@ $(() => {
                                 icon: 1,
                                 offset: '30%'
                             });
-                            this.getSetting();
                         } else {
                             layer.msg('网络异常，请联系管理员！', {
                                 icon: 5,
                                 offset: '30%'
                             });
-                            this.getSetting();
                         }
                     });
                 }
