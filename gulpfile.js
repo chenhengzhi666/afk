@@ -19,7 +19,7 @@ gulp.task('clean', () =>
 // 在命令行使用 gulp script 启动此任务
 gulp.task('js', () => 
     // 1. 找到文件
-    gulp.src('js/**/!(*.min).js')
+    gulp.src(['js/**/!(*.min).js', '!js/awardRotate.js'])
     //////把ES6代码转成ES5代码
     .pipe(babel())
     // 2. 压缩文件
@@ -64,7 +64,7 @@ gulp.task('copyLayui', () =>
 );
 
 gulp.task('copyServer', () => 
-    gulp.src('server/**')
+    gulp.src(['server/**', '!server/node_modules/**'])
       .pipe(gulp.dest('dist/server'))
 );
 
