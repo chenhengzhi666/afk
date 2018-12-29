@@ -68,6 +68,11 @@ gulp.task('copyServer', () =>
       .pipe(gulp.dest('dist/server'))
 );
 
+gulp.task('copyTxt', () => 
+    gulp.src(['./*.txt'])
+      .pipe(gulp.dest('dist/'))
+);
+
 //Html替换css、js文件版本
 gulp.task('rev', () => 
     gulp.src(['dist/rev/**/*.json', './**/*.html', '!node_modules/**'])
@@ -81,5 +86,5 @@ gulp.task('rev', () =>
         .pipe(gulp.dest('dist/'))
 );
 
-gulp.task('default', gulp.series('clean', gulp.parallel('css', 'js', 'img', 'copyJs', 'copyLayui', 'copyServer'), 'rev'));
+gulp.task('default', gulp.series('clean', gulp.parallel('css', 'js', 'img', 'copyJs', 'copyLayui', 'copyServer', 'copyTxt'), 'rev'));
 
