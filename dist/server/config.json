@@ -4,8 +4,8 @@
         "port": 3000
     },
     "WX": {
-        "appid": "wx1f9c767629fabde5",
-        "secret": "362855efacd523cedc6bc18805bb74b6",
+        "appid": "wxe61088fcd93f99e8",
+        "secret": "5e83f2ad91e219df5219c184617aa255",
         "redirect_uri": "https://www.suxiaozhi.cn/chz/index.html"
     },
     "MYSQL": {
